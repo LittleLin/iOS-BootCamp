@@ -16,6 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *storiesTableView;
 @property (strong, nonatomic) NSArray *stories;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -24,11 +25,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    // for refresh control
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.storiesTableView insertSubview:self.refreshControl atIndex:0];
+    
+    // for table view
     self.storiesTableView.dataSource = self;
     self.storiesTableView.delegate = self;
     
-    NSString *apiUrlString = @"http://news-at.zhihu.com/api/4/news/latest";
     
+    NSString *apiUrlString = @"http://news-at.zhihu.com/api/4/news/latest";
     NSURL *apiURL = [NSURL URLWithString:apiUrlString];
     NSURLRequest *request = [NSURLRequest requestWithURL: apiURL];
     
@@ -39,6 +46,24 @@
         self.stories = dict[@"stories"];
         [self.storiesTableView reloadData];
         [SVProgressHUD dismiss];
+    }];
+}
+
+- (void)onRefresh {
+    [self loadLatestStories];
+}
+
+- (void) loadLatestStories {
+    NSString *apiUrlString = @"http://news-at.zhihu.com/api/4/news/latest";
+    NSURL *apiURL = [NSURL URLWithString:apiUrlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL: apiURL];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:               ^(NSURLResponse * __nullable response, NSData * __nullable data, NSError * __nullable connectionError) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        
+        self.stories = dict[@"stories"];
+        [self.storiesTableView reloadData];        
+        [self.refreshControl endRefreshing];
     }];
 }
 
