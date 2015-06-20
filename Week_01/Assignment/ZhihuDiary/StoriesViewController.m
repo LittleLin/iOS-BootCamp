@@ -11,12 +11,15 @@
 #import "StoryViewController.h"
 #import <UIImageView+AFNetworking.h>
 #import <SVProgressHUD.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @interface StoriesViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *storiesTableView;
 @property (strong, nonatomic) NSArray *stories;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UIView *networkErrorView;
+
 
 @end
 
@@ -24,7 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     // for refresh control
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
@@ -34,23 +37,31 @@
     self.storiesTableView.dataSource = self;
     self.storiesTableView.delegate = self;
     
+    // for network error view
+    [self toggleNetworkErrorView:NO];
     
-    NSString *apiUrlString = @"http://news-at.zhihu.com/api/4/news/latest";
-    NSURL *apiURL = [NSURL URLWithString:apiUrlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL: apiURL];
-    
-    [SVProgressHUD showWithStatus:@"資料更新中..." maskType:SVProgressHUDMaskTypeBlack];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:               ^(NSURLResponse * __nullable response, NSData * __nullable data, NSError * __nullable connectionError) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        
-        self.stories = dict[@"stories"];
-        [self.storiesTableView reloadData];
-        [SVProgressHUD dismiss];
-    }];
+    // load latest stories
+    [self loadLatestStories];
 }
 
 - (void)onRefresh {
     [self loadLatestStories];
+}
+
+- (void)toggleNetworkErrorView: (BOOL) display {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    
+    CGRect currentFrame = self.networkErrorView.frame;
+    if (display) {
+        currentFrame.size = CGSizeMake(screenWidth, 30);
+        self.networkErrorView.hidden = NO;
+    } else {
+        currentFrame.size = CGSizeMake(screenWidth, 0);
+        self.networkErrorView.hidden = YES;
+    }
+    
+    self.networkErrorView.frame = currentFrame;
 }
 
 - (void) loadLatestStories {
@@ -58,12 +69,23 @@
     NSURL *apiURL = [NSURL URLWithString:apiUrlString];
     NSURLRequest *request = [NSURLRequest requestWithURL: apiURL];
     
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:               ^(NSURLResponse * __nullable response, NSData * __nullable data, NSError * __nullable connectionError) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    [SVProgressHUD showWithStatus:@"資料更新中..." maskType:SVProgressHUDMaskTypeBlack];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:               ^(NSURLResponse * __nullable response, NSData * __nullable data, NSError * __nullable error) {
         
-        self.stories = dict[@"stories"];
-        [self.storiesTableView reloadData];        
+        if ([data length] >0 && error == nil) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            self.stories = dict[@"stories"];
+            [self.storiesTableView reloadData];
+            
+            [self toggleNetworkErrorView:NO];
+        } else if ([data length] == 0 && error == nil) {
+            [self toggleNetworkErrorView:YES];
+        } else if (error != nil) {
+            [self toggleNetworkErrorView:YES];
+        }
+        
         [self.refreshControl endRefreshing];
+        [SVProgressHUD dismiss];
     }];
 }
 

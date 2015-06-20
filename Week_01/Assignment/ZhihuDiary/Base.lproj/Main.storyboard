@@ -17,15 +17,29 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="biE-Zl-KUj">
+                                    <rect key="frame" x="0.0" y="64" width="320" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="網路連線失敗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7kL-8H-U6R">
+                                            <rect key="frame" x="75" y="2" width="164" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MyStoryCell" rowHeight="90" id="3hz-8M-5bP" customClass="StoryCell">
-                                        <rect key="frame" x="0.0" y="86" width="320" height="90"/>
+                                        <rect key="frame" x="0.0" y="116" width="320" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3hz-8M-5bP" id="aZY-7I-psh">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="89"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f2p-qR-e6e" customClass="TopAlignedLabel" customModule="ZhihuDiary" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f2p-qR-e6e" customClass="TopAlignedLabel" customModule="ZhihuDiary" customModuleProvider="target">
                                                     <rect key="frame" x="8" y="8" width="224" height="75"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -51,6 +65,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="今日熱聞" id="2r0-15-298"/>
                     <connections>
+                        <outlet property="networkErrorView" destination="biE-Zl-KUj" id="Fxd-C2-8Ba"/>
                         <outlet property="storiesTableView" destination="yGV-bk-fCM" id="liH-U3-hz2"/>
                     </connections>
                 </viewController>
@@ -67,20 +82,34 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="c4g-B6-2xG">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="244"/>
+                                <rect key="frame" x="0.0" y="63" width="320" height="159"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OXA-JR-tDn" customClass="TopAlignedLabel" customModule="ZhihuDiary" customModuleProvider="target">
-                                <rect key="frame" x="7" y="252" width="306" height="44"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="1000" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4Sr-gn-Ojs" customClass="TopAlignedLabel" customModule="ZhihuDiary" customModuleProvider="target">
+                                <rect key="frame" x="7" y="277" width="306" height="281"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="characterWrap" numberOfLines="1000" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4Sr-gn-Ojs" customClass="TopAlignedLabel" customModule="ZhihuDiary" customModuleProvider="target">
-                                <rect key="frame" x="7" y="299" width="306" height="259"/>
+                            <view contentMode="scaleToFill" id="dcs-Yh-keL">
+                                <rect key="frame" x="0.0" y="63" width="320" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="網路連線失敗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hxt-MU-WkL">
+                                        <rect key="frame" x="78" y="2" width="164" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OXA-JR-tDn" customClass="TopAlignedLabel" customModule="ZhihuDiary" customModuleProvider="target">
+                                <rect key="frame" x="7" y="230" width="306" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -90,6 +119,7 @@
                     <navigationItem key="navigationItem" id="B5D-Mt-bFe"/>
                     <connections>
                         <outlet property="bodyLabel" destination="4Sr-gn-Ojs" id="yno-uU-6Xb"/>
+                        <outlet property="networkErrorView" destination="dcs-Yh-keL" id="6U6-B3-X8y"/>
                         <outlet property="pageImage" destination="c4g-B6-2xG" id="gW0-Dc-tPX"/>
                         <outlet property="titleLabel" destination="OXA-JR-tDn" id="RKP-Vw-5Wh"/>
                     </connections>
